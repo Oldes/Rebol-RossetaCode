@@ -1,0 +1,25 @@
+# Rebol - Rosetta Code
+
+A collection of [Rebol 3](https://github.com/Oldes/Rebol3) solutions for tasks published on [Rosetta Code](https://rosettacode.org) — a programming chrestomathy site that aims to present solutions to the same task in as many different languages as possible.
+
+## Requirements
+
+Scripts require [Oldes' Rebol 3](https://github.com/Oldes/Rebol3) interpreter. Prebuilt binaries for various platforms are available on the [releases page](https://github.com/Oldes/Rebol3/releases).
+
+## Usage
+
+Each script corresponds to a single Rosetta Code task and can be run directly:
+
+```
+rebol3 <script-name>.r3
+```
+
+## Contributing
+
+Contributions are welcome! If you'd like to add a solution for a task that isn't covered yet, or improve an existing one, feel free to open a pull request.
+
+Please make sure your script:
+- Runs with [Oldes' Rebol 3](https://github.com/Oldes/Rebol3)
+- Is named after the corresponding Rosetta Code task
+- Includes a comment at the top with a link to the task page
+
