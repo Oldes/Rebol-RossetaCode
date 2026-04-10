@@ -1,3 +1,5 @@
+[![rebol-rosettacode](https://github.com/user-attachments/assets/b74b23f8-a992-4d90-b749-f4872cf16de8)](https://github.com/Oldes/Rebol-RossetaCode)
+
 # Rebol - Rosetta Code
 
 A collection of [Rebol 3](https://github.com/Oldes/Rebol3) solutions for tasks published on [Rosetta Code](https://rosettacode.org) — a programming chrestomathy site that aims to present solutions to the same task in as many different languages as possible.
