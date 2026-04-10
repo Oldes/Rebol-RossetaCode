@@ -31,9 +31,9 @@ fraction-reduction: function/with [
             repeat ni len [
                 all [
                     nv: n-digits/:ni                  ;; get numerator digit
-                    dx:  index? find d-digits nv      ;; find matching digit in denominator
+                    di: index?  find d-digits nv      ;; find matching digit in denominator
                     rn: remove-digit n-digits len ni  ;; numerator with shared digit removed
-                    rd: remove-digit d-digits len dx  ;; denominator with shared digit removed
+                    rd: remove-digit d-digits len di  ;; denominator with shared digit removed
                     n * rd == (rn * d)                ;; cross-multiply to check n/d = rn/rd
                     ++ count                          ;; increment match counter
                     omitted/:nv: omitted/:nv + 1      ;; track which digit was cancelled
