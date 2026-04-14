@@ -75,13 +75,7 @@ score-hand: function/with [
     three-of-a-kind?: does [ all [3 = max-rank not full-house?] ]
     two-pair?:  does [ [2 2] = skip tail :rank-values -2 ]
     one-pair?:  does [ [1 2] = skip tail :rank-values -2 ]
-    high-card?: does [
-        all [
-            1 = max-rank
-            not flush? :suits
-            not straight? :ranks
-        ]
-    ]
+    high-card?: does [ all [1 = max-rank not flush? not straight?] ]
 ]
 
 foreach hand [
