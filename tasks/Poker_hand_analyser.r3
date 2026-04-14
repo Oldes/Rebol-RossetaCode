@@ -17,6 +17,9 @@ score-hand: function/with [
         ranks/:r: either ranks/:r [ranks/:r + 1][1]
         suits/:s: either suits/:s [suits/:s + 1][1]
     ]
+    suit-values:      values-of suits
+    rank-values: sort values-of ranks
+    max-rank:    last rank-values
     case [
         straight-flush?  ["straight-flush"]
         four-of-a-kind?  ["four-of-a-kind"]
@@ -32,6 +35,7 @@ score-hand: function/with [
 ][
     ranks: clear #[]
     suits: clear #[]
+    suit-values: rank-values: max-rank: none
     ;; Build sorted deck
     sorted-deck: copy []
     foreach s "♣♦♥♠" [
@@ -54,31 +58,26 @@ score-hand: function/with [
         ]
     ]
     straight?: function [] [
-        if 1 != first find-max values-of :ranks [return false]
+        if 1 != first find-max :rank-values [return false]
         mods: sort map-each x keys-of :ranks [rank-modifiers/:x]
         if mods = [10 20 30 40 130] [return true]
         while [not last? mods][
-            if (abs (mods/1 - mods/2)) > 10 [return false]
+            if 10 < abs (mods/1 - mods/2) [return false]
             ++ mods
         ]
         true
     ]
-    highest-suit?:    does [last sort map-keys :suits]
-    flush?:           does [1 = length? values-of :suits]
-    straight-flush?:  does [all [straight? :ranks flush? :suits]]
-    four-of-a-kind?:  does [4 = first find-max values-of :ranks]
-    full-house?:      does [[2 3] = sort values-of :ranks]
-    three-of-a-kind?: does [
-        all [
-            3 = first find-max values-of :ranks
-            not full-house? :ranks
-        ]
-    ]
-    two-pair?:  does [ [2 2] = take/part/last sort values-of :ranks 2 ]
-    one-pair?:  does [ [1 2] = take/part/last sort values-of :ranks 2 ]
+    highest-suit?:    does [ last sort keys-of suits ]
+    flush?:           does [ 1 = length? suit-values ]
+    straight-flush?:  does [ all [straight? flush?]  ]
+    four-of-a-kind?:  does [ 4 = max-rank            ]
+    full-house?:      does [ [2 3] = rank-values     ]
+    three-of-a-kind?: does [ all [3 = max-rank not full-house?] ]
+    two-pair?:  does [ [2 2] = skip tail :rank-values -2 ]
+    one-pair?:  does [ [1 2] = skip tail :rank-values -2 ]
     high-card?: does [
         all [
-            1 = first find-max values-of :ranks
+            1 = max-rank
             not flush? :suits
             not straight? :ranks
         ]
