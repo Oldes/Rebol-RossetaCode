@@ -77,7 +77,9 @@ items: [
 result: knapsack 400 items
 
 print "Bagged the following items:"
-foreach [item value weight] result/3 [
-    printf [" * " 12 4] reduce [item value weight]
+foreach [item weight value] result/3 [
+    printf [" * " 12 -4 -4] reduce [item value weight]
 ]
-print ["Total value:"  result/1 " total weight:" result/2]
+print [
+    "Total value  :" as-green result/1 LF
+    "Total weight :" as-green result/2]
