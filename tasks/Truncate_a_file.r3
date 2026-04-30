@@ -9,7 +9,13 @@ truncate: func [
     file  [file!]    "The file to truncate"
     bytes [integer!] "The number of bytes to keep"
 ][
-    write file read/part file bytes
+    ;; Naive approach:
+    ;;     write file read/part file bytes
+    ;; But better:
+    attempt [
+        close clear skip open/seek file bytes
+        file
+    ]
 ]
 
 ;; Write "Rosetta" repeated 1000 times as binary to file
