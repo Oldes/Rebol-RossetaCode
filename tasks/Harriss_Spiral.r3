@@ -20,7 +20,6 @@ hariss-spiral: function/with [
         pen off fill off line-width 1
     ]
     to-harriss :start-length :limit 1    ;; kick off recursive drawing
-    draw-cmds
     draw options/size draw-cmds
 ][
     hsr: 1.3247179                       ;; plastic constant — the Harriss spiral ratio
@@ -45,10 +44,10 @@ hariss-spiral: function/with [
     turn-right: func [deg] [turtle-angle: turtle-angle + deg]
 
     draw-arc: func [
-        radius sweep-deg dir             ;; dir: 1 = left turn, -1 = right turn
+        radius sweep-deg dir                                ;; dir: 1 = left turn, -1 = right turn
         /local center start-ang end-ang r b color
     ][
-        dir: negate dir                  ;; flip: screen Y-axis is inverted
+        dir: negate dir                                     ;; flip: screen Y-axis is inverted
 
         center: turtle-pos + either dir = 1 [
             as-pair (radius * cosine (turtle-angle + 90))   ;; center is left of heading
@@ -65,8 +64,8 @@ hariss-spiral: function/with [
         ][  start-ang - sweep-deg ]
 
         ;; brightness by radius: large arcs bright, small arcs dark
-        r: min 1.0 max 0.0 (radius - 5) / 395.0   ;; 0 = small, 1 = large
-        b: 100 + (r * 155)                        ;; brightness 100–255
+        r: min 1.0 max 0.0 (radius - 5) / 395.0             ;; 0 = small, 1 = large
+        b: 100 + (r * 155)                                  ;; brightness 100–255
         color: to tuple! reduce [b  b * 0.6  b * 0.3]
 
         append draw-cmds compose [
@@ -74,26 +73,26 @@ hariss-spiral: function/with [
             arc (center) (as-pair radius radius) (start-ang) (sweep-deg * dir)
         ]
 
-        turtle-pos: center + as-pair                    ;; advance turtle to arc's endpoint
+        turtle-pos: center + as-pair                        ;; advance turtle to arc's endpoint
             (radius * cosine end-ang)
             (radius * sine   end-ang)
 
-        turtle-angle: turtle-angle + (sweep-deg * dir)  ;; update heading
+        turtle-angle: turtle-angle + (sweep-deg * dir)      ;; update heading
     ]
 
     to-curve: func [len dir] [
-        draw-arc (len * (square-root 2) / 2) 90 dir     ;; inscribed quarter-circle
-        turn-left 180                                   ;; reverse direction for next branch
+        draw-arc (len * (square-root 2) / 2) 90 dir         ;; inscribed quarter-circle
+        turn-left 180                                       ;; reverse direction for next branch
     ]
 
     to-harriss: func [len lim dir] [
-        if len > lim [                          ;; base case: stop when segment is too small
+        if len > lim [                                      ;; base case: stop when segment is too small
             to-curve len dir
             push-turtle
-            to-harriss (len / 1.8) lim 1        ;; smaller sub-spiral (≈ 1/φ² branch)
+            to-harriss (len / 1.8) lim 1                    ;; smaller sub-spiral (≈ 1/φ² branch)
             pop-turtle
             turn-left 180
-            to-harriss (len / hsr) lim 1        ;; larger sub-spiral (1/plastic-constant branch)
+            to-harriss (len / hsr) lim 1                    ;; larger sub-spiral (1/plastic-constant branch)
             turn-right 90
         ]
     ]
