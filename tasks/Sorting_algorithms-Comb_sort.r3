@@ -2,32 +2,26 @@ Rebol [
     title: "Rosetta code: Sorting algorithms/Comb sort"
     file:  %Sorting_algorithms-Comb_sort.r3
     url:   https://rosettacode.org/wiki/Sorting_algorithms/Comb_sort
-    needs: 3.21.16
 ]
 
 comb-sort: function [
-    "Sort a block in ascending order using comb sort."
+    "Sort a series in ascending order using comb sort."
     items [series!] "Values to sort"
 ][
+    gapd: 1.2473
     gap: len: length? items
-    swapped: true
-    while [any [gap > 1  swapped]][
-        ;; shrink gap by factor of 1.3, with the '11 fix' for known bad gaps
-        gap: gap * 10 // 13
-        case [
-            any [gap = 9  gap = 10] [gap: 11]
-            gap < 1                 [gap: 1 ]
-        ]
-        swapped: false
-        i: 1
-        ;; compare each pair separated by 'gap', swap if out of order
-        loop len - gap [
-            j: i + gap
-            if items/:i > items/:j [
-                swap at items i at items j
-                swapped: true
+    swaps: 0
+
+    while [gap + swaps > 1][
+        swaps: 0
+        ;; shrink gap each pass until it reaches 1
+        if gap > 1 [gap: to integer! gap / gapd]
+        ;; compare and swap each pair separated by 'gap'
+        repeat k len - gap [
+            if items/:k > items/(k + gap) [
+                swap at items k at items k + gap
+                ++ swaps
             ]
-            ++ i
         ]
     ]
     items
