@@ -26,10 +26,10 @@ ternary: context [
     ]
     imp: func[a b][                           ;; material implication (a → b)
         case [
-            a = true  b                       ;; true → b  =  b
-            a = false true                    ;; false → b  =  true
-            b = true  true                    ;; a → true  =  true
-            'else     maybe                   ;; uncertain antecedent/consequent
+            a = true                  b       ;; true → b  =  b
+            a = false                 true    ;; false → b  =  true
+            b = true                  true    ;; a → true  =  true
+            'else                     maybe   ;; uncertain antecedent/consequent
         ]
     ]
     eq: func[a b][
