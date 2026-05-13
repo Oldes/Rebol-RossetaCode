@@ -13,7 +13,12 @@ if2: func [cond1 cond2 both one two none][
     ]
 ]
 
-print if2 false true ["both"       ]
-                     ["only first" ]
-                     ["only second"]
-                     ["none"       ]
+loop 5 [
+    printf ["a is" -3 ", b is" -3 ";" -15 " < 50"]
+    if2 (a: random 100) < 50
+        (b: random 100) < 50
+        [[a b "both are"      ]]
+        [[a b "only first is" ]]
+        [[a b "only second is"]]
+        [[a b "none is"       ]]   
+]
