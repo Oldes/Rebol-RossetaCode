@@ -23,26 +23,36 @@ regression: function [
     ;; accumulate raw moment sums
     xm: ym: x2m: x3m: x4m: xym: x2ym: 0.0
 
-    repeat i n [
-        xi: xa/:i
-        yi: ya/:i
-        xm:   xm   +  xi
-        ym:   ym   +  yi
-        x2m:  x2m  + (xi * xi)
-        x3m:  x3m  + (xi * xi * xi)
-        x4m:  x4m  + (xi * xi * xi * xi)
-        xym:  xym  + (xi * yi)
-        x2ym: x2ym + (xi * xi * yi)
+    either all [vector? xa vector? ya] [
+        ;; Using vector! math (faster)
+        xm: xa/mean
+        ym: ya/mean
+        x2:  (copy xa) * xa  x2m: x2/mean
+        x3:  x2 * xa         x3m: x3/mean
+        x4:  x3 * xa         x4m: x4/mean
+        xy:  (copy xa) * ya  xym: xy/mean
+        x2y: xy * xa        x2ym: x2y/mean
+    ][
+        repeat i n [
+            xi: xa/:i
+            yi: ya/:i
+            xm:   xm   +  xi
+            ym:   ym   +  yi
+            x2m:  x2m  + (xi * xi)
+            x3m:  x3m  + (xi * xi * xi)
+            x4m:  x4m  + (xi * xi * xi * xi)
+            xym:  xym  + (xi * yi)
+            x2ym: x2ym + (xi * xi * yi)
+        ]
+        ;; convert sums to means
+        xm:   xm   / n
+        ym:   ym   / n
+        x2m:  x2m  / n
+        x3m:  x3m  / n
+        x4m:  x4m  / n
+        xym:  xym  / n
+        x2ym: x2ym / n
     ]
-
-    ;; convert sums to means
-    xm:   xm   / n
-    ym:   ym   / n
-    x2m:  x2m  / n
-    x3m:  x3m  / n
-    x4m:  x4m  / n
-    xym:  xym  / n
-    x2ym: x2ym / n
 
     ;; central moments (variance/covariance terms)
     sxx:   x2m  - (xm  * xm)
@@ -57,7 +67,7 @@ regression: function [
         c: (sx2y * sxx   - (sxy  * sxx2)) / denom
         a: ym - (b * xm) - (c * x2m)
 
-    print ajoin ["y = " a " + " b "x + " c "x^^2" LF]
+    print ajoin [LF "y = " a " + " b "x + " c "x^^2" LF]
     ;; print input points alongside fitted values
     print " Input  Approximation"
     print " x   y        y1"
@@ -68,4 +78,8 @@ regression: function [
 
 xa: [0 1  2  3  4  5   6   7   8   9  10]
 ya: [1 6 17 34 57 86 121 162 209 262 321]
-regression xa ya
+print delta-time [regression xa ya]
+
+xa: #(i16![0 1  2  3  4  5   6   7   8   9  10])
+ya: #(i16![1 6 17 34 57 86 121 162 209 262 321])
+print delta-time [regression xa ya]
