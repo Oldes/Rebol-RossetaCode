@@ -13,11 +13,11 @@ measure-code: function [
     return: [time!] "The elapsed time"
 ][
     print ["Code to test:" mold/flat code]
-    tm: stats/timer
+    time: stats/timer
     do code
-    tm: stats/timer - tm
-    print ["Elapsed time:" tm "/" format-time tm]
-    tm
+    time: stats/timer - time
+    print ["Elapsed time:" time "/" format-time time]
+    time
 ]
 
 measure-code [data: append/dup clear [] [3 1 2 8 5 7 9 4 6] 10000]
